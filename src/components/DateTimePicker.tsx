@@ -14,8 +14,8 @@ export interface DateTimeSelection {
 export const DateTimePicker = () => {
   const [selection, setSelection] = useState<DateTimeSelection>({
     date: null,
-    startTime: "12:00 AM",
-    endTime: "3:00 AM",
+    startTime: "12:00",
+    endTime: "15:00",
     duration: 3
   });
 
@@ -29,15 +29,6 @@ export const DateTimePicker = () => {
     setSelection(prev => ({ ...prev, startTime, endTime, duration }));
   };
 
-  const formatSelectedDate = () => {
-    if (!selection.date) return "Select Date";
-    return selection.date.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -80,15 +71,6 @@ export const DateTimePicker = () => {
           )}
         </Card>
 
-        {/* Summary */}
-        <div className="mt-6 p-4 bg-card/60 backdrop-blur-glass rounded-2xl border-0 shadow-soft">
-          <h3 className="font-semibold text-foreground mb-2">Selection Summary</h3>
-          <div className="space-y-1 text-sm text-muted-foreground">
-            <p><span className="font-medium">Date:</span> {formatSelectedDate()}</p>
-            <p><span className="font-medium">Time:</span> {selection.startTime} - {selection.endTime}</p>
-            <p><span className="font-medium">Duration:</span> {selection.duration} hour{selection.duration !== 1 ? 's' : ''}</p>
-          </div>
-        </div>
 
         {/* Action Buttons */}
         <div className="flex gap-3 mt-6">

@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface CalendarProps {
   selectedDate: Date | null;
@@ -62,6 +68,23 @@ export const Calendar = ({ selectedDate, onDateSelect }: CalendarProps) => {
     });
   };
 
+  const setYear = (year: number) => {
+    setCurrentDate(prev => {
+      const newDate = new Date(prev);
+      newDate.setFullYear(year);
+      return newDate;
+    });
+  };
+
+  const generateYearOptions = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+      years.push(i);
+    }
+    return years;
+  };
+
   const days = getDaysInMonth(currentDate);
 
   return (
@@ -77,9 +100,30 @@ export const Calendar = ({ selectedDate, onDateSelect }: CalendarProps) => {
           <ChevronLeft className="h-4 w-4" />
         </Button>
         
-        <h2 className="text-lg font-semibold text-foreground">
-          {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-        </h2>
+        <div className="flex items-center gap-2">
+          <span className="text-lg font-semibold text-foreground">
+            {monthNames[currentDate.getMonth()]}
+          </span>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 px-2 flex items-center gap-1 hover:bg-primary/10">
+                <span className="text-lg font-semibold">{currentDate.getFullYear()}</span>
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="center" className="max-h-64 overflow-y-auto">
+              {generateYearOptions().map(year => (
+                <DropdownMenuItem
+                  key={year}
+                  onClick={() => setYear(year)}
+                  className={currentDate.getFullYear() === year ? "bg-primary/10" : ""}
+                >
+                  {year}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         
         <Button
           variant="ghost"

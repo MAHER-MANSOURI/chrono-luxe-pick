@@ -16,10 +16,9 @@ export const TimePicker = ({ startTime, endTime, duration, onTimeSelect }: TimeP
     const times = [];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute += 30) {
-        const period = hour < 12 ? 'AM' : 'PM';
-        const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+        const displayHour = hour.toString().padStart(2, '0');
         const displayMinute = minute.toString().padStart(2, '0');
-        const timeString = `${displayHour}:${displayMinute} ${period}`;
+        const timeString = `${displayHour}:${displayMinute}`;
         times.push({
           value: timeString,
           hour,
@@ -102,31 +101,20 @@ export const TimePicker = ({ startTime, endTime, duration, onTimeSelect }: TimeP
             const angle = (hour / 24) * 2 * Math.PI - Math.PI / 2;
             const x = centerX + (radius - 20) * Math.cos(angle);
             const y = centerY + (radius - 20) * Math.sin(angle);
-            const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-            const period = hour < 12 ? 'AM' : 'PM';
+            const displayHour = hour.toString().padStart(2, '0');
             
             return (
-              <g key={hour}>
-                <text
-                  x={x}
-                  y={y + 4}
-                  textAnchor="middle"
-                  fontSize="12"
-                  fill="hsl(var(--muted-foreground))"
-                  className="font-medium"
-                >
-                  {displayHour}
-                </text>
-                <text
-                  x={x}
-                  y={y + 16}
-                  textAnchor="middle"
-                  fontSize="10"
-                  fill="hsl(var(--muted-foreground))"
-                >
-                  {period}
-                </text>
-              </g>
+              <text
+                key={hour}
+                x={x}
+                y={y + 4}
+                textAnchor="middle"
+                fontSize="12"
+                fill="hsl(var(--muted-foreground))"
+                className="font-medium"
+              >
+                {displayHour}
+              </text>
             );
           })}
           
@@ -199,9 +187,7 @@ export const TimePicker = ({ startTime, endTime, duration, onTimeSelect }: TimeP
                   const endMinutes = startOption.totalMinutes + (hours * 60);
                   const endHour = Math.floor(endMinutes / 60) % 24;
                   const endMin = endMinutes % 60;
-                  const endPeriod = endHour < 12 ? 'AM' : 'PM';
-                  const endDisplayHour = endHour === 0 ? 12 : endHour > 12 ? endHour - 12 : endHour;
-                  const endTimeString = `${endDisplayHour}:${endMin.toString().padStart(2, '0')} ${endPeriod}`;
+                  const endTimeString = `${endHour.toString().padStart(2, '0')}:${endMin.toString().padStart(2, '0')}`;
                   setSelectedEndTime(endTimeString);
                 }
               }}
